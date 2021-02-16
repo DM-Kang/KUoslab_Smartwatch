@@ -1,0 +1,518 @@
+/*
+ * Copyright (c) 2016 Samsung Electronics Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include "../../inc/view_defines.h"
+#include "edc_defines.h"
+
+#define IMAGE_INDICATOR_1       "../res/images/main/main_indicator1_on.png"
+#define IMAGE_INDICATOR_2       "../res/images/main/main_indicator2_on.png"
+#define IMAGE_INDICATOR_3       "../res/images/main/main_indicator3_on.png"
+#define IMAGE_INDICATOR_DOT     "../res/images/main/indicator_dot.png"
+#define IMAGE_LINE              "../res/images/main/line.png"
+#define IMAGE_ROTARY_FRAME      "../res/images/main/menu_frame.png"
+#define IMAGE_ROTARY_TEXT_1     "../res/images/main/menu_text_examples.png"
+#define IMAGE_ROTARY_TEXT_2     "../res/images/main/menu_text_data.png"
+#define IMAGE_ROTARY_TEXT_3     "../res/images/main/menu_text_information.png"
+#define IMAGE_ROTARY_CLIPPER    "../res/images/main/menu_circle.png"
+#define IMAGE_BG_FRAME          "../res/images/main/background_frame.png"
+#define IMAGE_BUTTON_GO         "../res/images/main/button_normal.png"
+#define IMAGE_BUTTON_GO_PRESSED "../res/images/main/button_hover.png"
+#define PART_INDICATOR_1 "part,main,indicator_1"
+#define PART_INDICATOR_2 "part,main,indicator_2"
+#define PART_INDICATOR_3 "part,main,indicator_3"
+#define PART_INDICATOR_DOT "part,main,indicator,dot"
+#define PART_ROTARY_TEXT_1 "part,main,rotary,text_1"
+#define PART_ROTARY_TEXT_3 "part,main,rotary,text_2"
+#define PART_ROTARY_TEXT_2 "part,main,rotary,text_3"
+#define PART_ROTARY_FRAME "part,main,rotary,frame"
+#define PART_BG "bg"
+
+#define STYLE_TITLE "style,title"
+#define STATE_PRESSED "state,pressed"
+
+#define ROTARY_TEXT_ANGLE_OFFSET 70
+#define ROTARY_TIMER_TIMEOUT 0.5
+#define INDICATOR_DOT_ANGLE 21.0
+
+images {
+	image: IMAGE_BG                COMP;
+	image: IMAGE_OUTLINE           COMP;
+	image: IMAGE_INDICATOR_1       COMP;
+	image: IMAGE_INDICATOR_2       COMP;
+	image: IMAGE_INDICATOR_3       COMP;
+	image: IMAGE_INDICATOR_DOT     COMP;
+	image: IMAGE_LINE              COMP;
+	image: IMAGE_ROTARY_FRAME      COMP;
+	image: IMAGE_ROTARY_TEXT_1     COMP;
+	image: IMAGE_ROTARY_TEXT_2     COMP;
+	image: IMAGE_ROTARY_TEXT_3     COMP;
+	image: IMAGE_ROTARY_CLIPPER    COMP;
+	image: IMAGE_BUTTON_GO         COMP;
+	image: IMAGE_BUTTON_GO_PRESSED COMP;
+}
+
+collections {
+	styles {
+		style {
+			name: STYLE_TITLE;
+			base: "font=BreezeSans:style=regular font_size=29 color=#e7d619 wrap=mixed align=center valign=top";
+			tag:  "br" "\n";
+		}
+	}
+	group {
+		name: GRP_MAIN;
+		parts {
+			part {
+				name: PART_BG;
+				type: IMAGE;
+				mouse_events: 0;
+				description {
+					state: "default" 0.0;
+					image {
+						normal: IMAGE_BG;
+					}
+				}
+			}
+			part {
+				name: PART_OUTLINE;
+				type: IMAGE;
+				mouse_events: 0;
+				description {
+					state: "default" 0.0;
+					image {
+						normal: IMAGE_OUTLINE;
+					}
+				}
+			}
+			part
+			{
+				name: PART_INDICATOR_1;
+				type: IMAGE;
+				mouse_events: 0;
+				description {
+					state: "default" 0.0;
+					color: COLOR_YELLOW_R COLOR_YELLOW_G COLOR_YELLOW_B COLOR_YELLOW_A;
+					rel1 {
+						relative: 0.2861 0.0972;
+					}
+					rel2 {
+						relative: 0.4194 0.1583;
+					}
+					image {
+						normal: IMAGE_INDICATOR_1;
+					}
+				}
+			}
+			part {
+				name: PART_INDICATOR_2;
+				type: IMAGE;
+				mouse_events: 0;
+				description {
+					state: "default" 0.0;
+					color: 0 0 0 255;
+					rel1 {
+						relative: 0.4306 0.0889;
+					}
+					rel2 {
+						relative: 0.5833 0.1111;
+					}
+					image {
+						normal: IMAGE_INDICATOR_2;
+					}
+				}
+			}
+			part {
+				name: PART_INDICATOR_3;
+				type: IMAGE;
+				mouse_events: 0;
+				description {
+					state: "default" 0.0;
+					color: COLOR_YELLOW_R COLOR_YELLOW_G COLOR_YELLOW_B COLOR_YELLOW_A;
+					rel1 {
+						relative: 0.5806 0.0972;
+					}
+					rel2 {
+						relative: 0.7139 0.1583;
+					}
+					image {
+						normal: IMAGE_INDICATOR_3;
+					}
+				}
+			}
+			part {
+				name: PART_INDICATOR_DOT;
+				type: IMAGE;
+				mouse_events: 0;
+				description {
+					state: "default" 0.0;
+					rel1 {
+						relative: 0.4889 0.1250;
+					}
+					rel2 {
+						relative: 0.5139 0.1500;
+					}
+					image {
+						normal: IMAGE_INDICATOR_DOT;
+					}
+					map {
+						on: 1;
+						smooth: 0;
+						rotation {
+							center: PART_BG;
+							z: 0.0;
+						}
+					}
+				}
+			}
+			part {
+				name: PART_TITLE;
+				type: TEXTBLOCK;
+				mouse_events: 0;
+				description {
+					state: "default" 0.0;
+					rel1 {
+						relative: 0.0 0.2111;
+					}
+					rel2 {
+						relative: 1.0 0.4056;
+					}
+					text {
+						style: STYLE_TITLE;
+						text: "PREVIEW<br>SENSOR";
+					}
+				}
+			}
+			part {
+				name: PART_ROTARY_FRAME;
+				type: IMAGE;
+				mouse_events: 0;
+				description {
+					state: "default" 0.0;
+					rel1 {
+						relative: -0.0278 0.4722;
+					}
+					rel2 {
+						relative: 1.0278 1.5278;
+					}
+					image {
+						normal: IMAGE_ROTARY_FRAME;
+					}
+					map {
+						on: 1;
+						smooth: 1;
+						rotation {
+							z: 0.0;
+						}
+					}
+				}
+			}
+			part {
+				name: PART_ROTARY_TEXT_1;
+				type: IMAGE;
+				mouse_events: 0;
+				description {
+					state: "default" 0.0;
+					color: 0 0 0 255;
+					rel1 {
+						relative: -0.0278 0.4722;
+					}
+					rel2 {
+						relative: 1.0278 1.5278;
+					}
+					image {
+						normal: IMAGE_ROTARY_TEXT_1;
+					}
+					map {
+						on: 1;
+						smooth: 1;
+						rotation {
+							z: ROTARY_TEXT_ANGLE_OFFSET;
+						}
+					}
+				}
+			}
+			part {
+				name: PART_ROTARY_TEXT_2;
+				type: IMAGE;
+				mouse_events: 0;
+				description {
+					state: "default" 0.0;
+					color: COLOR_YELLOW_R COLOR_YELLOW_G COLOR_YELLOW_B COLOR_YELLOW_A;
+					rel1 {
+						relative: -0.0278 0.4722;
+					}
+					rel2 {
+						relative: 1.0278 1.5278;
+					}
+					image {
+						normal: IMAGE_ROTARY_TEXT_2;
+					}
+					map {
+						on: 1;
+						smooth: 1;
+						rotation {
+							z: 0.0;
+						}
+					}
+				}
+			}
+			part {
+				name: PART_ROTARY_TEXT_3;
+				type: IMAGE;
+				mouse_events: 0;
+				description {
+					state: "default" 0.0;
+					color: 0 0 0 255;
+					rel1 {
+						relative: -0.0278 0.4722;
+					}
+					rel2 {
+						relative: 1.0278 1.5278;
+					}
+					image {
+						normal: IMAGE_ROTARY_TEXT_3;
+					}
+					map {
+						on: 1;
+						smooth: 1;
+						rotation {
+							z: -ROTARY_TEXT_ANGLE_OFFSET;
+						}
+					}
+				}
+			}
+			part {
+				name: PART_LINE;
+				type: IMAGE;
+				mouse_events: 0;
+				description {
+					state: "default" 0.0;
+					rel1 {
+						relative: 0.4167 0.4639;
+					}
+					rel2 {
+						relative: 0.5833 0.4806;
+					}
+					image {
+						normal: IMAGE_LINE;
+					}
+				}
+			}
+			part {
+				name: PART_OVERLAY;
+				type: IMAGE;
+				mouse_events: 0;
+				description {
+					state: "default" 0.0;
+					image {
+						normal: IMAGE_BG_FRAME;
+					}
+				}
+			}
+			part {
+				name: PART_BUTTON;
+				type: IMAGE;
+				description {
+					state: STATE_DEFAULT 0.0;
+					rel1 {
+						relative: 0.2403 0.7806;
+					}
+					rel2 {
+						relative: 0.7597 1.0;
+					}
+					image {
+						normal: IMAGE_BUTTON_GO;
+					}
+				}
+				description {
+					state: STATE_PRESSED 0.0;
+					inherit: STATE_DEFAULT 0.0;
+					image {
+						normal: IMAGE_BUTTON_GO_PRESSED;
+					}
+				}
+			}
+		}
+
+		script {
+			public g_rotary_angle = 0;
+			public g_rotary_timer_id = 0;
+			public g_rotary_anim_id = 0;
+			public g_closest_pos = 0;
+
+			public _rotary_anim_cb(val, Float:pos) {
+				new start_pos = get_int(g_rotary_angle);
+				new Float:current_pos = start_pos  + ((get_int(g_closest_pos) - start_pos) * pos);
+
+				_set_rotary_part_angle(PART:PART_ROTARY_TEXT_1, ROTARY_TEXT_ANGLE_OFFSET, current_pos);
+				_set_rotary_part_angle(PART:PART_ROTARY_TEXT_2, 0, current_pos);
+				_set_rotary_part_angle(PART:PART_ROTARY_TEXT_3, -ROTARY_TEXT_ANGLE_OFFSET, current_pos)
+				_set_rotary_part_angle(PART:PART_ROTARY_FRAME, 0, current_pos)
+
+				set_int(g_rotary_angle, round(current_pos));
+
+				if (pos == 1.0)
+					_set_mode();
+			}
+
+			public _rotary_timer_cb(val) {
+				new Float:anim_time = (get_int(g_rotary_angle) - get_int(g_closest_pos)) / 50.0;
+				new anim_id = anim(abs(anim_time), "_rotary_anim_cb", val);
+
+				set_int(g_rotary_anim_id, anim_id);
+			}
+
+			public _set_closest_pos(angle) {
+				if (abs(angle) < abs(angle - -ROTARY_TEXT_ANGLE_OFFSET) &&
+						abs(angle) < abs(angle - ROTARY_TEXT_ANGLE_OFFSET))
+					set_int(g_closest_pos, 0);
+				else if (abs(angle - -ROTARY_TEXT_ANGLE_OFFSET) < abs(angle - ROTARY_TEXT_ANGLE_OFFSET))
+					set_int(g_closest_pos, -ROTARY_TEXT_ANGLE_OFFSET);
+				else
+					set_int(g_closest_pos, ROTARY_TEXT_ANGLE_OFFSET)
+			}
+
+			public _set_rotary_timer(angle) {
+				new anim_id = get_int(g_rotary_timer_id);
+
+				cancel_timer(anim_id);
+				anim_id = timer(ROTARY_TIMER_TIMEOUT, "_rotary_timer_cb", 0);
+				set_int(g_rotary_timer_id, anim_id);
+			}
+
+			public _set_part_selection(part, selected) {
+				custom_state(part, STATE_DEFAULT, 0.0);
+
+				if (selected)
+					set_state_val(part, STATE_COLOR, COLOR_YELLOW_R, COLOR_YELLOW_G, COLOR_YELLOW_B, COLOR_YELLOW_A);
+				else
+					set_state_val(part, STATE_COLOR, 0, 0, 0, 255);
+
+				set_state(part, STATE_CUSTOM, 0.0);
+			}
+
+			public _set_dot_position(dir) {
+				custom_state(PART:PART_INDICATOR_DOT, STATE_DEFAULT, 0.0);
+				set_state_val(PART:PART_INDICATOR_DOT, STATE_MAP_ROT_Z, INDICATOR_DOT_ANGLE * dir);
+				set_state(PART:PART_INDICATOR_DOT, STATE_CUSTOM, 0.0);
+			}
+
+			public _set_mode() {
+				new angle = get_int(g_rotary_angle);
+				new index_of_selected = 0;
+
+				if (abs(angle - -ROTARY_TEXT_ANGLE_OFFSET) < 10) {
+					index_of_selected = 0;
+					_set_dot_position(1);
+					send_message(MSG_INT, MSG_ID_MAIN_MODE, VIEW_MODE_EXAMPLE);
+				} else if (abs(angle - ROTARY_TEXT_ANGLE_OFFSET) < 10) {
+					index_of_selected = 2;
+					_set_dot_position(-1);
+					send_message(MSG_INT, MSG_ID_MAIN_MODE, VIEW_MODE_INFORMATION);
+				} else if (abs(angle) < 10) {
+					index_of_selected = 1;
+					_set_dot_position(0);
+					send_message(MSG_INT, MSG_ID_MAIN_MODE, VIEW_MODE_DATA);
+				}
+
+				new rotary[] = {
+					PART:PART_ROTARY_TEXT_1,
+					PART:PART_ROTARY_TEXT_2,
+					PART:PART_ROTARY_TEXT_3,
+				};
+
+				new indicator_lines[] = {
+					PART:PART_INDICATOR_3,
+					PART:PART_INDICATOR_2,
+					PART:PART_INDICATOR_1,
+				};
+
+				for (new i = 0; i < 3; ++i) {
+					_set_part_selection(rotary[i], i == index_of_selected);
+					_set_part_selection(indicator_lines[i], i != index_of_selected);
+				}
+			}
+
+			public _set_rotary_part_angle(part, Float:angle_offset, Float:angle) {
+				custom_state(part, STATE_DEFAULT, 0.0);
+				set_state_val(part, STATE_MAP_ROT_Z, angle_offset + angle);
+				set_state(part, STATE_CUSTOM, 0.0);
+			}
+
+			public _set_rotary_angle(dir) {
+				new angle = get_int(g_rotary_angle);
+				new anim_id = 0;
+
+				if (dir)
+					angle += 7;
+				else
+					angle -= 7;
+
+				if (angle > ROTARY_TEXT_ANGLE_OFFSET) {
+					angle = ROTARY_TEXT_ANGLE_OFFSET;
+					return;
+				} else if (angle < -ROTARY_TEXT_ANGLE_OFFSET) {
+					angle = -ROTARY_TEXT_ANGLE_OFFSET;
+					return;
+				}
+
+				if (angle != -ROTARY_TEXT_ANGLE_OFFSET && angle != 0 && angle != ROTARY_TEXT_ANGLE_OFFSET)
+					_set_rotary_timer(angle);
+				else
+					_set_mode();
+
+				anim_id = get_int(g_rotary_anim_id);
+				cancel_anim(anim_id);
+
+				set_int(g_rotary_angle, angle);
+				_set_closest_pos(angle);
+
+				_set_rotary_part_angle(PART:PART_ROTARY_TEXT_1, ROTARY_TEXT_ANGLE_OFFSET, angle);
+				_set_rotary_part_angle(PART:PART_ROTARY_TEXT_2, 0, angle);
+				_set_rotary_part_angle(PART:PART_ROTARY_TEXT_3, -ROTARY_TEXT_ANGLE_OFFSET, angle)
+				_set_rotary_part_angle(PART:PART_ROTARY_FRAME, 0, angle)
+			}
+
+			public message(Msg_Type:type, id, ...) {
+				if (type != MSG_INT || id != MSG_ID_ROTARY)
+					return;
+
+				_set_rotary_angle(getarg(2));
+			}
+		}
+
+		programs {
+			program {
+				signal: "mouse,down,1";
+				source: PART_BUTTON;
+				action: STATE_SET STATE_PRESSED 0.0;
+				target: PART_BUTTON;
+			}
+			program {
+				signal: "mouse,up,1";
+				source: PART_BUTTON;
+				action: STATE_SET STATE_DEFAULT 0.0;
+				target: PART_BUTTON;
+			}
+			program
+			{
+				signal: "mouse,clicked,1";
+				source: PART_BUTTON;
+				action: SIGNAL_EMIT SIGNAL_BUTTON_CLICKED "";
+			}
+		}
+	}
+}

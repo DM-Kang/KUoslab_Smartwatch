@@ -1,0 +1,134 @@
+/*
+ * Copyright (c) 2016 Samsung Electronics Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include "../../inc/view_defines.h"
+#include "edc_defines.h"
+
+#define IMAGE_DOT_NOTSELECTED "../res/images/indicator/indicator_notselected.png"
+#define IMAGE_DOT_SELECTED "../res/images/indicator/indicator_selected.png"
+#define STATE_SELECTED "state,selected"
+#define PART_NAME_LEN 255
+
+#define PART_INDICATOR_DOT(index, pos_x, pos_y)    \
+part {                                            \
+	name: PART_INDICATOR_DOT_NAME""index;          \
+	type: IMAGE;                                  \
+	description {                                 \
+		state: STATE_DEFAULT 0.0;                 \
+		rel1.relative: pos_x pos_y;               \
+		rel2.relative: pos_x+0.0278 pos_y+0.0278; \
+		image {                                   \
+			normal: IMAGE_DOT_NOTSELECTED;        \
+		}                                         \
+	}                                             \
+	description {                                 \
+		state: STATE_SELECTED 0.0;                \
+		inherit: STATE_DEFAULT 0.0;               \
+		image {                                   \
+			normal: IMAGE_DOT_SELECTED;           \
+		}                                         \
+	}                                             \
+}                                                 \
+
+
+images {
+	image: IMAGE_DOT_NOTSELECTED COMP;
+	image: IMAGE_DOT_SELECTED    COMP;
+}
+
+collections {
+	base_scale: 1.0;
+	group {
+		name: GRP_INDICATOR;
+		parts {
+			PART_INDICATOR_DOT("0", 0.2472, 0.1056)
+			PART_INDICATOR_DOT("1", 0.2806, 0.0861)
+			PART_INDICATOR_DOT("2", 0.3167, 0.0694)
+			PART_INDICATOR_DOT("3", 0.3528, 0.0556)
+			PART_INDICATOR_DOT("4", 0.3917, 0.0444)
+			PART_INDICATOR_DOT("5", 0.4306, 0.0389)
+			PART_INDICATOR_DOT("6", 0.4667, 0.0361)
+			PART_INDICATOR_DOT("7", 0.5056, 0.0361)
+			PART_INDICATOR_DOT("8", 0.5444, 0.0389)
+			PART_INDICATOR_DOT("9", 0.5833, 0.0444)
+			PART_INDICATOR_DOT("10", 0.6194, 0.0556)
+			PART_INDICATOR_DOT("11", 0.6583, 0.0694)
+			PART_INDICATOR_DOT("12", 0.6944, 0.0861)
+			PART_INDICATOR_DOT("13", 0.7278, 0.1056)
+
+			part {
+				name: PART_TITLE;
+				type: TEXT;
+				description {
+					state: "default" 0.0;
+					rel1.relative: 0.1667 0.1667;
+					rel2.relative: 0.8333 0.5;
+					color: COLOR_YELLOW_R COLOR_YELLOW_G COLOR_YELLOW_B COLOR_YELLOW_A;
+					text {
+						align: 0.5 0.0;
+						font: "BreezeSans:style=Medium";
+						text:"TXT";
+						size: 24;
+					}
+				}
+			}
+		}
+
+		script {
+			public g_current_selection = 0;
+
+			_get_part(index) {
+				new part;
+				new dst[PART_NAME_LEN];
+				snprintf(dst, PART_NAME_LEN, "%s%d", PART_INDICATOR_DOT_NAME, index);
+				part = get_part_id(dst);
+				return part;
+			}
+
+			_unset_dot() {
+				new current_index = get_int(g_current_selection);
+				new part = _get_part(current_index);
+				set_state(part, STATE_DEFAULT, 0.0);
+			}
+
+			_set_dot(new_index) {
+				new part = _get_part(new_index);
+				set_state(part, STATE_SELECTED, 0.0);
+				set_int(g_current_selection, new_index);
+			}
+
+			public message(Msg_Type:type, id, ...) {
+				if (type != MSG_INT || id != MSG_ID_INDICATOR_CHANGED)
+					return;
+
+				new index = getarg(2);
+				_unset_dot();
+				_set_dot(index);
+			}
+		}
+
+		programs {
+			program {
+				name: "load_cb";
+				signal: "load";
+				source: "";
+				script {
+					set_state(PART:PART_INDICATOR_DOT_NAME"0", STATE_SELECTED, 0.0);
+				}
+			}
+		}
+	}
+}

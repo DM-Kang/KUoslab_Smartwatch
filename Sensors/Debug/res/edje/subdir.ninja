@@ -1,0 +1,13 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+
+edctool = edje_cc
+edcflags = -id "C:/Users/battl/workspace/tyzen/Sensors/edje/images" -id "C:/tizen-studio/tools/edc-editor/share/enventor/images" -sd "C:/Users/battl/workspace/tyzen/Sensors/edje/sounds" -sd "C:/tizen-studio/tools/edc-editor/share/enventor/sounds" -fd "C:/Users/battl/workspace/tyzen/Sensors/edje/fonts" -fd "C:/tizen-studio/tools/edc-editor/share/enventor/fonts"
+
+build res/edje/data.edj: build_edc ../res/edje/data.edc 
+build res/edje/example.edj: build_edc ../res/edje/example.edc 
+build res/edje/indicator.edj: build_edc ../res/edje/indicator.edc 
+build res/edje/information.edj: build_edc ../res/edje/information.edc 
+build res/edje/main.edj: build_edc ../res/edje/main.edc 

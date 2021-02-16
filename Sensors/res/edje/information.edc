@@ -1,0 +1,125 @@
+/*
+ * Copyright (c) 2016 Samsung Electronics Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include "../../inc/view_defines.h"
+#include "edc_defines.h"
+
+#define IMAGE_BUTTON_PREV "../res/images/information/button_data_prev.png"
+#define IMAGE_BUTTON_NEXT "../res/images/information/button_data_next.png"
+#define STYLE_INFO "style,info"
+#define PART_PREV "part,button,prev"
+#define PART_NEXT "part,button,next"
+
+#define PART_INFO(part_name, pos_y)           \
+part {                                        \
+	name: part_name;                          \
+	type: TEXTBLOCK;                          \
+	description {                             \
+		state: "default" 0.0;                 \
+		rel1.relative: 0.1111 pos_y;          \
+		rel2.relative: 0.8889 pos_y+0.0667;   \
+		text {                                \
+			style: STYLE_INFO;                \
+			text: "NAME: <value>val</value>"; \
+		}                                     \
+	}                                         \
+}                                             \
+
+styles {
+	style {
+		name: STYLE_INFO;
+		base: "font=BreezeSans:style=Medium font_size=18 color=#e7d619 wrap=mixed align=center";
+		tag:  "value" "+ color=#000";
+	}
+}
+
+collections {
+	base_scale: 1.0;
+	images {
+		image: IMAGE_BG_2 COMP;
+		image: IMAGE_BUTTON_PREV COMP;
+		image: IMAGE_BUTTON_NEXT COMP;
+	}
+	group {
+		name: GRP_INFORMATION;
+		parts {
+			part {
+				name: PART_BG;
+				type: IMAGE;
+				description { state: "default" 0.0;
+					rel1.relative: 0.0 0.0;
+					rel2.relative: 1.0 1.0;
+					image {
+						normal: IMAGE_BG_2;
+					}
+				}
+			}
+			part {
+				name: PART_INDICATOR;
+				type: SWALLOW;
+				description {
+					state: "default" 0.0;
+					rel1.relative: 0.0 0.0;
+					rel2.relative: 1.0 1.0;
+				}
+			}
+
+			PART_INFO(PART_INFO_SUPPORTED, 0.3)
+			PART_INFO(PART_INFO_RANGE, 0.3833)
+			PART_INFO(PART_INFO_RES, 0.4667)
+			PART_INFO(PART_INFO_VENDOR, 0.55)
+
+			part {
+				name: PART_PREV;
+				type: IMAGE;
+				description {
+					state: "default" 0.0;
+					rel1.relative: 0.2250 0.6917;
+					rel2.relative: 0.4889 0.8278;
+					image {
+						normal: IMAGE_BUTTON_PREV;
+					}
+				}
+			}
+			part {
+				name: PART_NEXT;
+				type: IMAGE;
+				description {
+					state: "default" 0.0;
+					rel1.relative: 0.5111 0.6917;
+					rel2.relative: 0.7750 0.8278;
+					image {
+						normal: IMAGE_BUTTON_NEXT;
+					}
+				}
+			}
+		}
+		programs {
+			program
+			{
+				signal: "mouse,clicked,1";
+				source: PART_PREV;
+				action: SIGNAL_EMIT SIGNAL_NEXT_CLICKED "";
+			}
+			program
+			{
+				signal: "mouse,clicked,1";
+				source: PART_NEXT;
+				action: SIGNAL_EMIT SIGNAL_PREV_CLICKED "";
+			}
+		}
+	}
+}

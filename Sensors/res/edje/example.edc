@@ -1,0 +1,118 @@
+/*
+ * Copyright (c) 2016 Samsung Electronics Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include "../../inc/view_defines.h"
+#include "edc_defines.h"
+
+#define IMAGE_BG_EXAMPLE "../res/images/examples/background_examples.png"
+#define IMAGE_BUTTON_PLAY "../res/images/examples/play_button_normal.png"
+#define IMAGE_BUTTON_PLAY_PRESSED "../res/images/examples/play_button_hoover.png"
+
+collections {
+	base_scale: 1.0;
+	images {
+		image: IMAGE_BG_EXAMPLE COMP;
+		image: IMAGE_BUTTON_PLAY COMP;
+		image: IMAGE_BUTTON_PLAY_PRESSED COMP;
+		image: IMAGE_OUTLINE_2 COMP;
+	}
+	group {
+		name: GRP_EXAMPLE;
+		parts {
+			part {
+				name: PART_BG;
+				type: IMAGE;
+				description { state: "default" 0.0;
+					rel1.relative: 0.0 0.0;
+					rel2.relative: 1.0 1.0;
+					image {
+						normal: IMAGE_BG_EXAMPLE;
+					}
+				}
+			}
+			part {
+				name: PART_ANIM;
+				type: SWALLOW;
+				description {
+					state: "default" 0.0;
+					rel1.relative: 0.0 0.0;
+					rel2.relative: 1.0 1.0;
+				}
+			}
+			part {
+				name: PART_OUTLINE;
+				type: IMAGE;
+				description {
+					state: "default" 0.0;
+					rel1.relative: 0.0 0.0;
+					rel2.relative: 1.0 1.0;
+					image {
+						normal: IMAGE_OUTLINE_2;
+					}
+				}
+			}
+			part {
+				name: PART_INDICATOR;
+				type: SWALLOW;
+				description {
+					state: "default" 0.0;
+					rel1.relative: 0.0 0.0;
+					rel2.relative: 1.0 1.0;
+				}
+			}
+			part {
+				name: PART_BUTTON;
+				type: IMAGE;
+				description {
+					state: STATE_DEFAULT 0.0;
+					rel1 {
+						relative: 0.2417 0.7806;
+					}
+					rel2 {
+						relative: 0.7611 1.0;
+					}
+					image.normal: IMAGE_BUTTON_PLAY;
+				}
+				description {
+					state: STATE_PRESSED 0.0;
+					inherit: STATE_DEFAULT 0.0;
+					image.normal: IMAGE_BUTTON_PLAY_PRESSED;
+				}
+			}
+		}
+		programs {
+			program {
+				signal: "mouse,down,1";
+				source: PART_BUTTON;
+				action: STATE_SET STATE_PRESSED 0.0;
+				target: PART_BUTTON;
+			}
+			program {
+				signal: "mouse,up,1";
+				source: PART_BUTTON;
+				action: STATE_SET STATE_DEFAULT 0.0;
+				target: PART_BUTTON;
+			}
+			program
+			{
+				signal: "mouse,clicked,1";
+				source: PART_BUTTON;
+				action: SIGNAL_EMIT SIGNAL_BUTTON_CLICKED "";
+			}
+		}
+
+	}
+}
