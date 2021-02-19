@@ -34,7 +34,7 @@ static bool app_create(void *user_data)
 	data_initialize(view_data_update_sensor_values);
 	view_create();
 	// added by dmkang
-	//mqttInit();
+	mqttInit();
 
 	return true;
 }

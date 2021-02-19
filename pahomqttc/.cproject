@@ -274,7 +274,6 @@
 									<listOptionValue builtIn="false" value="Native_API"/>
 								</option>
 								<option id="sbi.gnu.c.compiler.option.preprocessor.def.symbols.deprecation.372942244" name="Defined symbols (-D)" superClass="sbi.gnu.c.compiler.option.preprocessor.def.symbols.deprecation" useByScannerDiscovery="false" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="OPENSSL"/>
 									<listOptionValue builtIn="false" value="TIZEN_DEPRECATION"/>
 									<listOptionValue builtIn="false" value="DEPRECATION_WARNING"/>
 									<listOptionValue builtIn="false" value="_DEBUG"/>

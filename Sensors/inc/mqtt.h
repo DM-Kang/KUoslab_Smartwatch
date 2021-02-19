@@ -13,9 +13,9 @@
 #include "string.h"
 #include "mqtt/MQTTClient.h"
 
-#define ADDRESS     "tcp://192.168.1.12:1883"
+#define ADDRESS     "tcp://ec2-3-17-177-172.us-east-2.compute.amazonaws.com:1883"
 #define CLIENTID    "GalaxyWatch3-1910"
-#define TOPIC       "TizenWatch"
+#define TOPIC       "TizenWatch-1910"
 #define PAYLOAD     "Hello World!"
 #define QOS         1
 #define TIMEOUT     10000L
