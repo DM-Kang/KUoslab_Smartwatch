@@ -1,0 +1,126 @@
+//-
+ *
+ *  *****************************************************************************************************
+ *   Copyright 2020 Korea University 
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *   *****************************************************************************************************
+ *   Developed by Kwanhoon Lee, Jaemin Im, Stella team, Operating Systems Lab of Korea University
+ *   *****************************************************************************************************
+ *
+ -//
+doctype html
+html
+  head
+    title CORONA LAB 
+    meta(name='viewport', content='width=device-width, initial-scale=1.0'  charset='utf-8')
+
+    meta(property="keywords", content="corona, patient, blockchain, notary, archive, archiving, 코로나, 코로나랩, 블록체인, 환자관리, 공증" charset='utf-8')
+    meta(property="og:title", content="블록체인기반 코로나19 환자 관리  시스템"  charset='utf-8')
+    meta(property="og:description", content="코로나 19 환자들의 정보를 기록하세요. 블록체인에 소중하게 저장됩니다!"  charset='utf-8')
+    //-meta(property="og:image", content="http://thefact.io/favicon.png"  charset='utf-8')
+
+    link(rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png")
+    link(rel="icon" type="image/png" sizes="200x200" href="/favicon.png")
+
+    link(rel='stylesheet', href='https://fonts.googleapis.com/icon?family=Material+Icons')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+    link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css')
+
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/card.css')
+
+    script(src='https://code.jquery.com/jquery-3.3.1.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js')
+    //- script(src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js')
+    script(src='/js/materialize.js' charset="UTF-8")
+
+    script(src='https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js')
+
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js')
+    script(src='http://mozilla.github.io/pdf.js/build/pdf.js')
+
+    script(src='https://cdn.jsdelivr.net/npm/toastify-js')
+
+  nav(class="nav-fixed" style="background-color: #9e2b2b")
+    div(class="nav-wrapper.container")
+      a(class="button-collapse" href="#" data-activates="slide-out" id="button-collapse")
+        i.material-icons menu
+
+        a(class="brand-logo center" href='/') CORONA LAB        
+
+      ul(id="nav-mobile" class="right hide-on-med-and-down")
+          li
+            a(href='/about') About
+          li
+            a(href='/howitworks') How it works
+          //- li
+          //-   a(href='/proof') Proof
+
+  ul(id="slide-out" class="side-nav")
+    li
+      a(href='/')
+        |Home
+        i.mdi-action-home.left.small
+
+    li
+      a(href='/about')
+        |About
+        i.mdi-action-stars.left.small
+
+    li
+      a(href='/howitworks')
+        |How it works
+        i.mdi-action-info-outline.left.small
+
+    //- li
+    //-   a(href='/proof')
+    //-     |Proof
+    //-     i.mdi-communication-forum.left.small
+
+  body
+    main
+
+    script.
+      //- notification.showToast();
+
+    div.loader(id="loading")
+      h1 LOADING
+        span.bullets .
+
+    block header
+        header.header
+
+    block content
+
+    script.
+      $(document).ready(function() {
+        $('.button-collapse').sideNav();
+        $('#loading').hide();
+        $('#upload').submit(function(){ $('#loading').show(); });
+        $('#snapshot').submit(function(){ $('#loading').show(); });
+      });
+
+      var clipboard = new ClipboardJS('.btn_copy_url');
+      clipboard.on('success', function(e) {
+          alert("링크 복사가 완료되었습니다.")
+      });
+
+      clipboard.on('error', function(e) {
+          alert("Ctrl + C 를 누르면 복사가 완료됩니다.")
+      });
+
+  block footer
+    include footer.pug

@@ -1,0 +1,197 @@
+//-
+ *
+ *  *****************************************************************************************************
+ *   Copyright 2020 Korea University 
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *   *****************************************************************************************************
+ *   Developed by Kwanhoon Lee, Jaemin Im, Stella team, Operating Systems Lab of Korea University
+ *   *****************************************************************************************************
+ *
+ -//
+extends layout
+
+block content
+  .container
+    .row
+      .col-md-3.col-sm-6(style="color:#E53935")
+        h4
+          center 코로나 확진자 정보 저장 시스템
+      .col-md-3.col-sm-6(style="color:#000000")
+        h6
+          center 코로나 확진자 정보를 기록하세요. 
+
+    .row 
+     .col.s12
+        p 
+          h5 COVID-19
+          h6 확진자의 정보를 기록해 주세요.  해당 정보는 안전하게  블록체인 시스템에 저장됩니다.
+
+    form(action='/upload' method="POST" id="upload")
+      .row
+        .col.s12
+          if msg == 101
+            .success
+              | 코로나랩에 데이터가 성공적으로 저장되었습니다.
+          else if msg == 102
+            .error
+              | 에러: 유효하지 않은 정보 이거나  중복된 기록이 이미 블록체인에 저장되어 있습니다.
+
+      .row
+       .input-field.col.s12
+        input#caption.validate(type='text' name="name" required)
+        label(for='name') 환자 이름  
+
+       .input-field.col.s12
+        input#caption.validate(type='text' name="birthDate" required)
+        label(for='birtheDate') 환자 생년월일
+
+       .input-field.col.s12
+        input#caption.validate(type='text' name="infection" required)
+        label(for='infection') 확진여부 (Y/N)
+
+       .input-field.col.s12
+        input#caption.validate(type='text' name="date" required)
+        label(for='date') 날짜 
+
+       .input-field.col.s12
+        input#caption.validate(type='text' name="travelRoute" required)
+        label(for='travelRoute') 환자 동선 
+
+       .input-field.col.s12
+        input#caption.validate(type='text' name="note" required)
+        label(for='note') 비고 
+      
+      .row
+        .col.s12
+          button.btn.waves-effect.waves-light(type='submit', name='snapshotAction' id='btn_snapshot')
+            | Save
+            i.material-icons.right send
+
+  
+    .row
+      .col.s12
+        br   
+        h4 Recent Items
+  
+    .row
+      .col.s12
+        .row
+          .input-field.col.s12
+            i.material-icons.prefix search
+            input#autocomplete-input.autocomplete(type='text')
+            label(for='autocomplete-input') Find
+
+       
+
+    .infinite_scroll
+      .post 
+
+  script.
+
+    var nameList = {
+      '':null
+    }
+
+    document.addEventListener('DOMContentLoaded', function(e){
+      var elems = document.querySelectorAll('.chips');
+      var instances = M.Chips.init(elems);
+      
+      function chip2data(id){
+        var namelist = [];
+        
+        names = M.Chips.getInstance($("#"+id)).chipsData;
+        $.each(names, function(index, value){
+          namelist.push(names[index].name);
+        });
+        
+        return namelist.join(' ')
+      }
+
+      $('#btn_upload').on('click',
+        function(){
+          name = chip2data('chip_upload');          
+          $('input[name=tagFile]').val(name.toString('utf-8'));
+        }  
+      )
+      $('#btn_snapshot').on('click',
+        function(){
+          name = chip2data('chip_snapshot');
+          $('input[name=tagUrl]').val(name.toString('utf-8'));
+        }
+      )
+      
+    });
+    
+    $(document).ready(function(){
+      $('.chips').chips();
+      $('.chips-initial').chips();
+      $('.chips-placeholder').chips({
+        placeholder: 'Name',
+        secondaryPlaceholder: '+Name',
+      });
+      
+      $.get( "/namelist", function( data ) {
+        tempNamelist = JSON.parse(data);
+        tempNamelist.forEach(function(e){
+          nameList[e._id] = null;
+        })
+      });
+
+      var infScl = $('.infinite_scroll').infiniteScroll({
+        path: function(){
+          var pageNumber = (this.loadCount + 1)
+          return '/patients?page='+ pageNumber + '&limit=5'
+        },
+        append: '.post',
+      });
+      
+      infScl.on('append.infiniteScroll', function( event, response, path, items ) {
+        $('.collapsible').collapsible();
+      });
+
+      $('#autocomplete-input').keyup(function(e){
+        if(e.which == 13){//Enter key up
+        $.get( "/name?name="+$('#autocomplete-input').val(), function(result) {
+          $(".infinite_scroll").replaceWith($($.parseHTML(result)).find(".infinite_scroll"));
+          $('.collapsible').collapsible();
+          });     
+        } else if($('#autocomplete-input').val() == ""){
+          window.location.replace("/");
+        }        
+      });
+      
+      $('input.autocomplete').autocomplete({
+        data: nameList,
+        autoFocus: true,
+        onAutocomplete: function(data){
+          console.log( "data",data);
+          encoded = encodeURI(data).replace(/%20/g, "+");
+
+          //- $.get( "/name?name="+encoded, function(result) {
+          //-   $(".infinite_scroll").replaceWith($($.parseHTML(result)).find(".infinite_scroll"));
+          //-   $('.collapsible').collapsible();
+          //-   });     
+          }        
+      });
+    })
+
+    Toastify({
+        text: "현재 시험 운영 중 입니다. 모두 손 잘 씻으세요.",
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        positionLeft: true,
+        backgroundColor: "#FF0000",
+    }).showToast();
+
