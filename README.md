@@ -101,13 +101,85 @@ mosquitto_sub -t "Topic" -p 1883
 
 The Hyperledger network used in this project provides REST APIs externally for creating, viewing, and deleting Ledgers. Therefore, you need a plug-in that uses the data transmitted from the smartwatch to convert it to REST APIs and delivers it to the Hyperledger network. Since this application is written in Java, you can make it into a Jar-type executable file and run it with MQTT Broker.
 
+The execution command of the JAR file is as follows.
+
+```
+cd MQTT_REST_Translator/bin
+java -jar MQTT_REST_Translator.jar
+```
+
 
 
 ## Hyperledger Network-side
 
-#### Installing Hyperledger-Composer & Fabric
+#### Installing & Running Hyperledger-Composer & Fabric
 
-Please refer to the link below https://github.com/DM-Kang/KUoslab_Smartwatch/blob/main/HF_custom/README.md
+- NVM
+
+  ```
+  cd $HOME
+  sudo apt-get install build-essential libssl-dev
+  curl https://raw.githubusercontent.com/creationix/nvm/v0.25.0/install.sh | bash 
+  source ~/.profile
+  ```
+
+- NODEJS & NPM
+
+  ```
+   nvm install v8
+  ```
+
+- MongoDB
+
+  - https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
+
+- Golang(1.13)
+
+  - https://golang.org/doc/install
+  - When installing Golang, set the location (GOPATH) to save source and binary files to $HOME/go, $HOME/go/bin
+
+- Hyperledger Fabric (version 1.1) - Component and binary file installation to operate fabric network
+
+  ```
+   mkdir -p $GOPATH/src/github.com
+   cd $GOPATH/src/github.com 
+   git clone https://github.com/hyperledger/fabric-samples.git
+   cd fabric-samples
+   curl -sSL https://bit.ly/2ysbOFE | bash -s  1.1.0
+  ```
+
+- Hyperledger Composer (version 0.19) - Provides REST server that can execute chaincode by interlocking with Fabric
+
+  ```
+   npm install -g composer-cli@0.19
+   npm install -g composer-rest-server@0.19
+   npm install -g generator-hyperledger-composer@0.19
+   npm install -g composer-playground@0.19
+  ```
+
+- Running the Hyperledger Fabric network
+
+  ```
+   cd HF_custom/hyperledger/hyperledger-fabric
+   ./2_startFabric.sh
+  ```
+
+  ![results1](https://tva1.sinaimg.cn/large/008i3skNgy1gq0jahphloj31xo0n5qni.jpg)
+
+- Running Hyperledger Composer REST Server
+
+  ```
+   cd ../hyperledger-composer
+   ./run-oslab.sh
+  ```
+
+  - Checking the execution result (Issuing an Admin Card and checking the chaincode installation)
+
+    ![results2](https://tva1.sinaimg.cn/large/008i3skNgy1gq0jdt4yjoj30uu0q2dja.jpg)
+
+  - Checking Composer's REST server execution (http://localhost:5000)
+
+    ![results3](https://tva1.sinaimg.cn/large/008i3skNgy1gq0jeq2tdkj31jk0u04qp.jpg)
 
 
 
