@@ -196,7 +196,7 @@ As shown below, it can be seen that the health data transmitted from the smart w
 
 ![그림2](https://tva1.sinaimg.cn/large/008i3skNgy1gq0i6k1u56j30wn0mm15d.jpg)
 
-# Future Works
+
 
 
 
