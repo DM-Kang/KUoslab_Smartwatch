@@ -75,6 +75,8 @@ If it is successful, you will be able to confirm that the tpk file is normally i
 
 #### Installing Mosquitto
 
+***<u>I recommend using a commercial cloud server such as Amazon AWS to take advantage of the free DDNS service to improve remote connectivity.</u>***
+
 Mosquitto is an open source MQTT Broker that anyone can easily use. Installation can be done through the command below. (Ubuntu 20.04)
 
 ```
@@ -111,6 +113,8 @@ java -jar MQTT_REST_Translator.jar
 
 
 ## Hyperledger Network-side
+
+***<u>To install this software, you must secure at least 8 GB of storage (cannot be installed on instances provided through AWS Free-tier).</u>***
 
 #### Installing & Running Hyperledger-Composer & Fabric
 
