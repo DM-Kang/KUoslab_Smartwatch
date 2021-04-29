@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include "mqtt.h"
 #include "thpool.h"
+#include <system_info.h>
 
 #define THREAD_NUM	4
 
@@ -29,7 +30,7 @@ int mqttInit() {
 
 	if ((rc = MQTTClient_connect(client, &conn_opts)) != MQTTCLIENT_SUCCESS) {
 		dlog_print(DLOG_ERROR, LOG_TAG, "Client is not connected with MQTT Broker, %d", rc);
-		exit(-1);
+		//exit(-1);
 	}
 	else {
 		dlog_print(DLOG_INFO, LOG_TAG, "MQTT Connected");
@@ -40,7 +41,16 @@ int mqttInit() {
 }
 
 void _mqttPublish(void * msg) {
-	char * topicName = TOPIC;
+	char * tizenId;
+	int ret;
+
+    ret = system_info_get_platform_string("http://tizen.org/system/tizenid", &tizenId);
+    if (ret != SYSTEM_INFO_ERROR_NONE) {
+        /* Error handling */
+        return;
+    }
+
+	char * topicName = tizenId;
 	int rc;
 	MQTTClient_message pubMsg = MQTTClient_message_initializer;
 	pubMsg.payload = msg;
@@ -50,6 +60,7 @@ void _mqttPublish(void * msg) {
 
 	MQTTClient_publishMessage(client, topicName, &pubMsg, &token);
 	rc = MQTTClient_waitForCompletion(client, token, TIMEOUT);
+	free(tizenId); /* Release after use */
 }
 
 void mqttPublish(void * msg) {
