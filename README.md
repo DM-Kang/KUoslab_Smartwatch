@@ -12,7 +12,7 @@ The structure of this software can be described as follows.
 ## Smartwatch
 
 Smartwatches are great devices that can provide information on the movement of users. It can also measure the user's health information (heart rate, blood pressure, blood sugar, step count, etc.) and transmit the data directly to the cloud server via Wi-Fi or cellular networks.
-Currently, a watch application using Tizen-based Galaxy Watch 3 is implemented and uses the MQTT protocol.
+Currently, a watch application using Tizen-based Samsung Galaxy Watch 3 is implemented and uses the MQTT protocol.
 
 ## MQTT Broker & MQTT to REST Translator
 The MQTT protocol is a popular protocol widely used for data transmission of IoT devices. MQTT can be used in high-performance devices such as smartphones as well as small devices without OS. In addition, it is supported by most commercial clouds (ex> Amazon AWS, MS Azure, etc.), so it has an advantage in terms of connectivity.
@@ -21,7 +21,7 @@ In addition, this project supports MQTT to REST Translator to convert MQTT messa
 
 ## Blockchain Network based on Hyperledger-Fabric
 
-Blockchain network is an essential element to protect the security and integrity of data collected from users. In this project, a blockchain network is constructed using Hyperledger-Fabric, and Hyperledger-Composer is used to control this network. Hyperledger-Composer provides a REST API that supports secure addition, inquiry, and deletion of user data.
+Blockchain network is an essential element to protect the security and integrity of data collected from users. In this project, a blockchain network is constructed using Hyperledger-Fabric, and Hyperledger-Composer is used to control this network. Hyperledger-Composer provides REST APIs that support secure addition, inquiry, and deletion of user data.
 
 ## Mobile App
 Regardless of Android/iOS, data can be visualized using any mobile application that supports the MQTT protocol. Many of these applications have been uploaded to the App Store. The following applications are recommended for this project.
@@ -114,7 +114,7 @@ java -jar MQTT_REST_Translator.jar
 
 ## Hyperledger Network-side
 
-***<u>To install this software, you must secure at least 8 GB of storage (cannot be installed on instances provided through AWS Free-tier).</u>***
+***<u>To install this software, your computer must have at least 8 GB of storage (cannot be installed on instances provided through AWS Free-tier).</u>***
 
 #### Installing & Running Hyperledger-Composer & Fabric
 
@@ -194,7 +194,6 @@ As shown below, it can be seen that the health data transmitted from the smart w
 ![그림2](https://tva1.sinaimg.cn/large/008i3skNgy1gq0i6k1u56j30wn0mm15d.jpg)
 
 # Future Works
-
 
 
 
