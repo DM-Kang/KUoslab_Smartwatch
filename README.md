@@ -26,7 +26,8 @@ Blockchain network is an essential element to protect the security and integrity
 ## Mobile App
 Regardless of Android/iOS, data can be visualized using any mobile application that supports the MQTT protocol. Many of these applications have been uploaded to the App Store. The following applications are recommended for this project.
 
-
+- IoT MQTT Panel: https://play.google.com/store/apps/details?id=snr.lab.iotmqttpanel.prod
+- MQTT Dashboard: https://play.google.com/store/apps/details?id=com.lapetov.mqtt
 
 
 # Setup
