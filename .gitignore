@@ -62,3 +62,5 @@ KUSensors/Debug/
 Sensors/\.sign/
 
 KUSensors/\.sign/
+
+*.class

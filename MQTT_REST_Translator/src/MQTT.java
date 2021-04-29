@@ -26,23 +26,23 @@ public class MQTT implements MqttCallback{
 	private static MqttConnectOptions connOpts;
 
 	public MQTT(String broker, String client_id,String username, String passwd){
-		this.Broker = broker;
-		this.Client_ID = client_id;
-		this.UserName = username;
-		this.Passwd = passwd;
+		MQTT.Broker = broker;
+		MQTT.Client_ID = client_id;
+		MQTT.UserName = username;
+		MQTT.Passwd = passwd;
 	}
 
 	public void init(String topic){
-		this.persistence = new MemoryPersistence();
+		MQTT.persistence = new MemoryPersistence();
 		try {
-			Client = new MqttAsyncClient(this.Broker, this.Client_ID, this.persistence);
+			Client = new MqttAsyncClient(MQTT.Broker, MQTT.Client_ID, MQTT.persistence);
 			connOpts = new MqttConnectOptions();
 			if(Client_ID!=null && Passwd != null) {
-				connOpts.setUserName(this.UserName);
-				connOpts.setPassword(this.Passwd.toCharArray());
+				connOpts.setUserName(MQTT.UserName);
+				connOpts.setPassword(MQTT.Passwd.toCharArray());
 			}
 			connOpts.setCleanSession(true);
-			System.out.println("Connecting to broker: "+this.Broker);
+			System.out.println("Connecting to broker: "+MQTT.Broker);
 
 			Client.connect(connOpts);
 			Client.setCallback(this);

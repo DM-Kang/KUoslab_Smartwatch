@@ -1,5 +1,4 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
@@ -22,10 +21,10 @@ import org.json.simple.parser.ParseException;
 public class MQTT_REST_Translator {
 	public static void main(String[] args){
 		String MqttServer 	= "tcp://ec2-3-35-50-233.ap-northeast-2.compute.amazonaws.com:1883";
-		String client_id 	= "MQTT_REST_Translator_01";
+		String client_id 	= "MQTT_REST_Translator_" + System.currentTimeMillis();
 		String username 	= null;   
 		String passwd 		= null;   
-		String topic 		= "TizenWatch-1910";
+		String topic 		= "#"; // all topics in the MQTT network
 		
 		MQTT mqtt = new MQTT(MqttServer, client_id, username, passwd);
 		mqtt.init(topic);
@@ -83,12 +82,12 @@ public class MQTT_REST_Translator {
 		try {
 			URL url = new URL(strUrl);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			con.setConnectTimeout(5000); //¼­¹ö¿¡ ¿¬°áµÇ´Â Timeout ½Ã°£ ¼³Á¤
-			con.setReadTimeout(5000); // InputStream ÀÐ¾î ¿À´Â Timeout ½Ã°£ ¼³Á¤
+			con.setConnectTimeout(5000); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ Timeout ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
+			con.setReadTimeout(5000); // InputStream ï¿½Ð¾ï¿½ ï¿½ï¿½ï¿½ï¿½ Timeout ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 			con.setRequestMethod("POST");
 
-			//jsonÀ¸·Î message¸¦ Àü´ÞÇÏ°íÀÚ ÇÒ ¶§ 
+			//jsonï¿½ï¿½ï¿½ï¿½ messageï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ 
 			con.setRequestProperty("Content-Type", "application/json");
 			con.setDoInput(true);
 			con.setDoOutput(true);
@@ -96,7 +95,7 @@ public class MQTT_REST_Translator {
 			con.setDefaultUseCaches(false);
 
 			OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
-			wr.write(jsonMessage); //json Çü½ÄÀÇ message Àü´Þ 
+			wr.write(jsonMessage); //json ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ message ï¿½ï¿½ï¿½ï¿½ 
 			wr.flush();
 
 			StringBuilder sb = new StringBuilder();
@@ -117,7 +116,7 @@ public class MQTT_REST_Translator {
 	}
 	
     /**
-     * SHA-256À¸·Î ÇØ½ÌÇÏ´Â ¸Þ¼Òµå
+     * SHA-256ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼Òµï¿½
      * 
      * @param bytes
      * @return
@@ -132,7 +131,7 @@ public class MQTT_REST_Translator {
  
  
     /**
-     * ¹ÙÀÌÆ®¸¦ Çí½º°ªÀ¸·Î º¯È¯ÇÑ´Ù
+     * ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ñ´ï¿½
      * 
      * @param bytes
      * @return
