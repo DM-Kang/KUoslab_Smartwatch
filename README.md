@@ -99,8 +99,6 @@ mosquitto_sub -t "Topic" -p 1883
 
 #### Running MQTT to REST Translator
 
-The Hyperledger network used in this project provides REST APIs externally for creating, viewing, and deleting Ledgers. Therefore, you need a plug-in that uses the data transmitted from the smartwatch to convert it to REST APIs and delivers it to the Hyperledger network.
-
 The Hyperledger network used in this project provides REST APIs externally for creating, viewing, and deleting Ledgers. Therefore, you need a plug-in that uses the data transmitted from the smartwatch to convert it to REST APIs and delivers it to the Hyperledger network. Since this application is written in Java, you can make it into a Jar-type executable file and run it with MQTT Broker.
 
 
