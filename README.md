@@ -1,4 +1,4 @@
-﻿
+
 # COVID-19 Confirmed Positive Cases Management System using Smartwatch and Hyperledger-fabric Blockchain Network for Data Integrity
 
 Since the pandemic caused by COVID-19 has continued, the need for a system that can collect, safely store and search the movement and health information of confirmed patients has emerged. In particular, it is extremely important to block forgery/modification attempts caused by external intrusion and to keep data integrity. This software meets these needs.
@@ -7,7 +7,7 @@ Since the pandemic caused by COVID-19 has continued, the need for a system that 
 # Architecture
 
 The structure of this software can be described as follows.
-그림
+![스크린샷 2021-04-29 오후 12.44.04](https://tva1.sinaimg.cn/large/008i3skNgy1gq0h9wtxnuj312l0lctde.jpg)
 
 ## Smartwatch
 
@@ -29,104 +29,100 @@ Regardless of Android/iOS, data can be visualized using any mobile application t
 
 # Setup
 
-## Open a file
+## Smartwatch-side
 
-You can open a file from **Google Drive**, **Dropbox** or **GitHub** by opening the **Synchronize** sub-menu and clicking **Open from**. Once opened in the workspace, any modification in the file will be automatically synced.
+#### Installing Tizen Studio
 
-## Save a file
-
-You can save any file of the workspace to **Google Drive**, **Dropbox** or **GitHub** by opening the **Synchronize** sub-menu and clicking **Save on**. Even if a file in the workspace is already synced, you can save it to another location. StackEdit can sync one file with multiple locations and accounts.
-
-## Synchronize a file
-
-Once your file is linked to a synchronized location, StackEdit will periodically synchronize it by downloading/uploading any modification. A merge will be performed if necessary and conflicts will be resolved.
-
-If you just have modified your file and you want to force syncing, click the **Synchronize now** button in the navigation bar.
-
-> **Note:** The **Synchronize now** button is disabled if you have no file to synchronize.
-
-## Manage file synchronization
-
-Since one file can be synced with multiple locations, you can list and manage synchronized locations by clicking **File synchronization** in the **Synchronize** sub-menu. This allows you to list and remove synchronized locations that are linked to your file.
+Please refer to the link below https://developer.tizen.org/ko/development/tizen-studio/download/installing-tizen-studio
 
 
-# Publication
 
-Publishing in StackEdit makes it simple for you to publish online your files. Once you're happy with a file, you can publish it to different hosting platforms like **Blogger**, **Dropbox**, **Gist**, **GitHub**, **Google Drive**, **WordPress** and **Zendesk**. With [Handlebars templates](http://handlebarsjs.com/), you have full control over what you export.
+#### Issuing a certificate for the operation of the Samsung smartwatch application
 
-> Before starting to publish, you must link an account in the **Publish** sub-menu.
-
-## Publish a File
-
-You can publish your file by opening the **Publish** sub-menu and by clicking **Publish to**. For some locations, you can choose between the following formats:
-
-- Markdown: publish the Markdown text on a website that can interpret it (**GitHub** for instance),
-- HTML: publish the file converted to HTML via a Handlebars template (on a blog for example).
-
-## Update a publication
-
-After publishing, StackEdit keeps your file linked to that publication which makes it easy for you to re-publish it. Once you have modified your file and you want to update your publication, click on the **Publish now** button in the navigation bar.
-
-> **Note:** The **Publish now** button is disabled if your file has not been published yet.
-
-## Manage file publication
-
-Since one file can be published to multiple locations, you can list and manage publish locations by clicking **File publication** in the **Publish** sub-menu. This allows you to list and remove publication locations that are linked to your file.
+Please refer to the link below https://docs.tizen.org/application/vstools/tools/certificate-manager/
 
 
-# Markdown extensions
 
-StackEdit extends the standard Markdown syntax by adding extra **Markdown extensions**, providing you with some nice features.
+#### Installing Samsung Wearable Platform
 
-> **ProTip:** You can disable any **Markdown extension** in the **File properties** dialog.
+This project is created based on Samsung Wearable Platform v5.5. Samsung Wearable Platform can be installed using Package Manager in Tizen Studio.
 
-
-## SmartyPants
-
-SmartyPants converts ASCII punctuation characters into "smart" typographic punctuation HTML entities. For example:
-
-|                |ASCII                          |HTML                         |
-|----------------|-------------------------------|-----------------------------|
-|Single backticks|`'Isn't this fun?'`            |'Isn't this fun?'            |
-|Quotes          |`"Isn't this fun?"`            |"Isn't this fun?"            |
-|Dashes          |`-- is en-dash, --- is em-dash`|-- is en-dash, --- is em-dash|
+![스크린샷 2021-04-29 오전 10.51.46](https://tva1.sinaimg.cn/large/008i3skNgy1gq0he9expij30km0l20z2.jpg)
 
 
-## KaTeX
 
-You can render LaTeX mathematical expressions using [KaTeX](https://khan.github.io/KaTeX/):
+#### Connecting Samsung smartwatch through Wi-Fi
 
-The *Gamma function* satisfying $\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N$ is via the Euler integral
+In order to connect the Samsung smartwatch and the IDE, the computer on which the IDE is installed and the smartwatch must be connected to the same Wi-Fi network, and you can see that the smartwatch is detected as shown below.
 
-$$
-\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.
-$$
-
-> You can find more information about **LaTeX** mathematical expressions [here](http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference).
+![스크린샷 2021-04-29 오전 11.02.56](https://tva1.sinaimg.cn/large/008i3skNgy1gq0h9j49naj30uw0n1gsm.jpg)
 
 
-## UML diagrams
 
-You can render UML diagrams using [Mermaid](https://mermaidjs.github.io/). For example, this will produce a sequence diagram:
+#### Compiling Samsung smartwatch applications
 
-```mermaid
-sequenceDiagram
-Alice ->> Bob: Hello Bob, how are you?
-Bob-->>John: How about you John?
-Bob--x Alice: I am good thanks!
-Bob-x John: I am good thanks!
-Note right of John: Bob thinks a long<br/>long time, so long<br/>that the text does<br/>not fit on a row.
+Import the KUSensors in the Smartwatch/Samsung Galaxy Watch 3/ path to Tizen Studio and click the Run button.
 
-Bob-->Alice: Checking with John...
-Alice->John: Yes... John, how are you?
+![스크린샷 2021-04-29 오후 1.07.15](https://tva1.sinaimg.cn/large/008i3skNgy1gq0hj21icsj31g90u0kcq.jpg)
+
+If it is successful, you will be able to confirm that the tpk file is normally installed on the smartwatch as shown below.
+
+![스크린샷 2021-04-29 오전 11.04.00](https://tva1.sinaimg.cn/large/008i3skNgy1gq0hkonsqsj30yb0b3te3.jpg)
+
+
+
+## MQTT Broker-side
+
+#### Installing Mosquitto
+
+Mosquitto is an open source MQTT Broker that anyone can easily use. Installation can be done through the command below. (Ubuntu 20.04)
+
+```
+sudo apt-get install mosquitto
 ```
 
-And this will produce a flow chart:
+When Mosquitto is installed, shut down the Mosquitto daemon as follows to use customized configurations for this project, and run it again with the configuration file.
 
-```mermaid
-graph LR
-A[Square Rect] -- Link text --> B((Circle))
-A --> C(Round Rect)
-B --> D{Rhombus}
-C --> D
 ```
+sudo service mosquitto stop
+cd MQTT Broker/Mosquitto
+./run_mosquitto_broker.sh
+```
+
+After running Mosquitto, you can monitor messages from the topic you want to receive with the command below.
+
+```
+mosquitto_sub -t "Topic" -p 1883
+```
+
+
+
+#### Running MQTT to REST Translator
+
+The Hyperledger network used in this project provides REST APIs externally for creating, viewing, and deleting Ledgers. Therefore, you need a plug-in that uses the data transmitted from the smartwatch to convert it to REST APIs and delivers it to the Hyperledger network.
+
+The Hyperledger network used in this project provides REST APIs externally for creating, viewing, and deleting Ledgers. Therefore, you need a plug-in that uses the data transmitted from the smartwatch to convert it to REST APIs and delivers it to the Hyperledger network. Since this application is written in Java, you can make it into a Jar-type executable file and run it with MQTT Broker.
+
+
+
+## Hyperledger Network-side
+
+#### Installing Hyperledger-Composer & Fabric
+
+Please refer to the link below https://github.com/DM-Kang/KUoslab_Smartwatch/blob/main/HF_custom/README.md
+
+
+
+## Result
+
+As shown below, it can be seen that the health data transmitted from the smart watch was transmitted to the Hyperledger-fabric network through the MQTT Broker.
+
+![그림2](https://tva1.sinaimg.cn/large/008i3skNgy1gq0i6k1u56j30wn0mm15d.jpg)
+
+# Future Works
+
+
+
+
+
+
