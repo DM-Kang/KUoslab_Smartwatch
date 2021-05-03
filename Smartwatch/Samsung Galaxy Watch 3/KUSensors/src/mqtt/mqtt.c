@@ -18,6 +18,8 @@ MQTTClient_deliveryToken token;
 threadpool thpool;
 
 int mqttInit() {
+	// 1. Get MQTT connection information(broker address, port, etc.) through REST API
+
 	MQTTClient_connectOptions conn_opts = MQTTClient_connectOptions_initializer;
 	int rc;
 

@@ -64,3 +64,9 @@ Sensors/\.sign/
 KUSensors/\.sign/
 
 *.class
+
+Smartwatch/Samsung Galaxy Watch 3/KUSensors/.sign/signature1.xml
+
+Smartwatch/Samsung Galaxy Watch 3/KUSensors/.sign/author-signature.xml
+
+Smartwatch/Samsung Galaxy Watch 3/KUSensors/.sign/.manifest.tmp
