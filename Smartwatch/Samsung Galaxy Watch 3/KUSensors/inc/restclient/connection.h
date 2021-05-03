@@ -15,7 +15,7 @@
 #include <cstdlib>
 
 #include "restclient/restclient.h"
-//#include "restclient-cpp/version.h"
+#include "restclient/version.h"
 
 /**
  * @brief namespace for all RestClient definitions

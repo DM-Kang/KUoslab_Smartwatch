@@ -194,7 +194,7 @@ static inline void releaseStringValue(char* value, unsigned) { free(value); }
 // //////////////////////////////////////////////////////////////////
 #if !defined(JSON_IS_AMALGAMATION)
 
-#include "json_valueiterator.inl"
+#include "../json/json_valueiterator.inl"
 #endif // if !defined(JSON_IS_AMALGAMATION)
 
 namespace Json {

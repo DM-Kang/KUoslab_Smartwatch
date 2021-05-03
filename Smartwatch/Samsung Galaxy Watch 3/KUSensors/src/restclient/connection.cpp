@@ -24,7 +24,7 @@
 
 #include "restclient/restclient.h"
 #include "restclient/helpers.h"
-//#include "restclient-cpp/version.h"
+#include "restclient/version.h"
 
 /**
  * @brief constructor for the Connection object
@@ -191,7 +191,7 @@ RestClient::Connection::GetUserAgent() {
 	if (this->customUserAgent.length() > 0) {
 		prefix = this->customUserAgent + " ";
 	}
-	return std::string(prefix + "restclient-cpp/" + "1.0.0");
+	return std::string(prefix + "restclient-cpp/" + RESTCLIENT_VERSION);
 }
 
 /**

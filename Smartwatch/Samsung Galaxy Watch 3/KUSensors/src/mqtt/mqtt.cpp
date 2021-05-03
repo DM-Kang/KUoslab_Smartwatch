@@ -6,10 +6,15 @@
  */
 
 #include <sensors.h>
-#include <stdlib.h>
+//#include <stdlib.h>
 #include "mqtt.h"
 #include "thpool.h"
 #include <system_info.h>
+#include <stdio.h>
+#include <string.h>
+
+#include "restclient/restclient.h"
+#include "json/json.h"
 
 #define THREAD_NUM	4
 
@@ -19,6 +24,10 @@ threadpool thpool;
 
 int mqttInit() {
 	// 1. Get MQTT connection information(broker address, port, etc.) through REST API
+	RestClient::Response r = RestClient::get(REST_API_ADDR);
+	std::string res = r.body;
+
+	// 2. Parse the HTTP Response & Connect to MQTT Broker
 
 	MQTTClient_connectOptions conn_opts = MQTTClient_connectOptions_initializer;
 	int rc;
@@ -46,6 +55,7 @@ void _mqttPublish(void * msg) {
 	char * tizenId;
 	int ret;
 
+	std::string str = (char *) msg;
     ret = system_info_get_platform_string("http://tizen.org/system/tizenid", &tizenId);
     if (ret != SYSTEM_INFO_ERROR_NONE) {
         /* Error handling */
@@ -56,7 +66,7 @@ void _mqttPublish(void * msg) {
 	int rc;
 	MQTTClient_message pubMsg = MQTTClient_message_initializer;
 	pubMsg.payload = msg;
-	pubMsg.payloadlen = strlen(msg);
+	pubMsg.payloadlen = str.length();
 	pubMsg.qos = QOS;
 	pubMsg.retained = 0;
 

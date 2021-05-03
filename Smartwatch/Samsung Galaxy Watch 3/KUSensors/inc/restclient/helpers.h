@@ -14,7 +14,7 @@
 #include <algorithm>
 #include <functional>
 
-//#include "restclient-cpp/version.h"
+#include "restclient/version.h"
 
 /**
  * @brief namespace for all RestClient definitions
