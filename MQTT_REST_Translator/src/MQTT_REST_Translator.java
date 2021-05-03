@@ -20,7 +20,7 @@ import org.json.simple.parser.ParseException;
 
 public class MQTT_REST_Translator {
 	public static void main(String[] args){
-		String MqttServer 	= "tcp://ec2-3-35-50-233.ap-northeast-2.compute.amazonaws.com:1883";
+		String MqttServer 	= "tcp://ec2-13-125-65-148.ap-northeast-2.compute.amazonaws.com:1883";
 		String client_id 	= "MQTT_REST_Translator_" + System.currentTimeMillis();
 		String username 	= null;   
 		String passwd 		= null;   
