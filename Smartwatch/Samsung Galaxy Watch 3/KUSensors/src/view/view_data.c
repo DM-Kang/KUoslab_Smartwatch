@@ -190,8 +190,6 @@ void view_data_update_sensor_values(int count, float *values)
 	char mqtt_string[1024] = {0,};
 	char mqtt_string_buf[1024] = {0,};
 	char temp[128] = {0,};
-	char * tizenId;
-    int ret;
 	static int transactionId = 0;
 	time_t timestamp = 0;
 
@@ -207,19 +205,12 @@ void view_data_update_sensor_values(int count, float *values)
 		values[1] = values[2];
 
 	// added by dmkang
-    ret = system_info_get_platform_string("http://tizen.org/system/tizenid", &tizenId);
-    if (ret != SYSTEM_INFO_ERROR_NONE) {
-        /* Error handling */
-        return;
-    }
-
 	timestamp = time(NULL);
 	snprintf(mqtt_string, sizeof(mqtt_string),
 			"{\"transaction_id\":%d,"
 			"\"timestamp\":%ld,"
 			"\"sensor_type\":%d,"
-			"\"device_id\":%s,"
-			"\"sensor_data\":{", transactionId++, timestamp, s_info.position, tizenId);
+			"\"sensor_data\":{", transactionId++, timestamp, s_info.position);
 
 	for (i = 0; i < MAX_VALUES_PER_SENSOR; ++i) {
 		snprintf(name_part, NAME_MAX, "%s%d", PART_DATA_PARAM_NAME, i);
@@ -256,7 +247,6 @@ void view_data_update_sensor_values(int count, float *values)
 
 	//TODO - porting JSON parser lib.
 	mqttPublish(mqtt_string);
-	free(tizenId); /* Release after use */
 }
 
 /**

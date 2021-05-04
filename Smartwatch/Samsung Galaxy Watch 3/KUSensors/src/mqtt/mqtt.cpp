@@ -12,15 +12,18 @@
 #include <system_info.h>
 #include <stdio.h>
 #include <string.h>
+#include <memory.h>
 
 #include "restclient/restclient.h"
 #include "json/json.h"
+#include "sha256.h"
 
 #define THREAD_NUM	4
 
 MQTTClient client;
 MQTTClient_deliveryToken token;
 threadpool thpool;
+char deviceID[SHA256_BLOCK_SIZE * 2 + 1];
 
 int mqttInit() {
 	Json::Reader reader;
@@ -62,32 +65,45 @@ int mqttInit() {
 		dlog_print(DLOG_INFO, LOG_TAG, "MQTT Connected");
 	}
 
+	// 3. Make DeviceID & ThreadPool
+	char * tizenId;
+	int ret;
+	ret = system_info_get_platform_string("http://tizen.org/system/tizenid", &tizenId);
+	if (ret != SYSTEM_INFO_ERROR_NONE) {
+		/* Error handling */
+		// TODO Alert to users through a Tizen Pop-up message
+	}
+
+	SHA256_CTX ctx;
+	BYTE buf[SHA256_BLOCK_SIZE];
+	sha256_init(&ctx);
+	sha256_update(&ctx, (BYTE *) tizenId, strlen(tizenId));
+	sha256_final(&ctx, buf);
+
+    for(int i = 0; i < SHA256_BLOCK_SIZE; i++)
+    {
+        sprintf(deviceID + (i * 2), "%02x", buf[i]);
+    }
+    deviceID[SHA256_BLOCK_SIZE * 2] = 0;
+
+	dlog_print(DLOG_INFO, LOG_TAG, "deviceID: %s", deviceID);
+
 	thpool = thpool_init(THREAD_NUM);
+	free(tizenId); /* Release after use */
 	return rc;
 }
 
 void _mqttPublish(void * msg) {
-	char * tizenId;
-	int ret;
-
-	std::string str = (char *) msg;
-	ret = system_info_get_platform_string("http://tizen.org/system/tizenid", &tizenId);
-	if (ret != SYSTEM_INFO_ERROR_NONE) {
-		/* Error handling */
-		return;
-	}
-
-	char * topicName = tizenId;
+	const char * topicName = deviceID;
 	int rc;
 	MQTTClient_message pubMsg = MQTTClient_message_initializer;
 	pubMsg.payload = msg;
-	pubMsg.payloadlen = str.length();
+	pubMsg.payloadlen = strlen((char *)msg);
 	pubMsg.qos = QOS;
 	pubMsg.retained = 0;
 
 	MQTTClient_publishMessage(client, topicName, &pubMsg, &token);
 	rc = MQTTClient_waitForCompletion(client, token, TIMEOUT);
-	free(tizenId); /* Release after use */
 }
 
 void mqttPublish(void * msg) {
