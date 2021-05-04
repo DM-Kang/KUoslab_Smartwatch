@@ -1,3 +1,4 @@
+package kr.ac.korea.oslab.kuhealthapi;
 /**
  * 
  */
@@ -100,7 +101,7 @@ public class MQTT implements MqttCallback{
 	@Override
 	public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
 		System.out.println("Message arrived : " + new String(mqttMessage.getPayload(), "UTF-8"));
-		MQTT_REST_Translator.postwork(topic, mqttMessage);
+		KuHealthApiApplication.postwork(topic, mqttMessage);
 	}
 
 	@Override
