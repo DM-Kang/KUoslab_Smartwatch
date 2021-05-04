@@ -23,17 +23,31 @@ MQTTClient_deliveryToken token;
 threadpool thpool;
 
 int mqttInit() {
+	Json::Reader reader;
+	Json::Value resJson;
+	std::string clientID = (CLIENTID + std::to_string(time(NULL)));
+
 	// 1. Get MQTT connection information(broker address, port, etc.) through REST API
 	RestClient::Response r = RestClient::get(REST_API_ADDR);
 	std::string res = r.body;
+	dlog_print(DLOG_INFO, LOG_TAG, "r.body, %s", r.body.c_str());
 
-	// 2. Parse the HTTP Response & Connect to MQTT Broker
+	if (r.code != 200) {
+		dlog_print(DLOG_ERROR, LOG_TAG, "Can't connect to REST API Server, %d", r.code);
+		// TODO Alert to users through a Tizen Pop-up message
+	}
+	else {
+		// 2. Parse the HTTP Response & Connect to MQTT Broker
+		reader.parse(res, resJson);
+	}
 
 	MQTTClient_connectOptions conn_opts = MQTTClient_connectOptions_initializer;
 	int rc;
-
-	if ((rc = MQTTClient_create(&client, ADDRESS, CLIENTID, MQTTCLIENT_PERSISTENCE_NONE, NULL)) != MQTTCLIENT_SUCCESS) {
+	dlog_print(DLOG_INFO, LOG_TAG, "MQTT_ADDRESS: %s, CID: %s", r.code == 200 ? resJson["uri_with_port"].asCString() : MQTT_ADDRESS, clientID.c_str());
+	if ((rc = MQTTClient_create(&client, (r.code == 200 ? resJson["uri_with_port"].asCString() : MQTT_ADDRESS),
+			clientID.c_str(), MQTTCLIENT_PERSISTENCE_NONE, NULL)) != MQTTCLIENT_SUCCESS) {
 		dlog_print(DLOG_ERROR, LOG_TAG, "Can't create MQTTClient object, %d", rc);
+		// TODO Alert to users through a Tizen Pop-up message
 	}
 
 	conn_opts.keepAliveInterval = 3600;
@@ -41,6 +55,7 @@ int mqttInit() {
 
 	if ((rc = MQTTClient_connect(client, &conn_opts)) != MQTTCLIENT_SUCCESS) {
 		dlog_print(DLOG_ERROR, LOG_TAG, "Client is not connected with MQTT Broker, %d", rc);
+		// TODO Alert to users through a Tizen Pop-up message
 		//exit(-1);
 	}
 	else {
@@ -56,11 +71,11 @@ void _mqttPublish(void * msg) {
 	int ret;
 
 	std::string str = (char *) msg;
-    ret = system_info_get_platform_string("http://tizen.org/system/tizenid", &tizenId);
-    if (ret != SYSTEM_INFO_ERROR_NONE) {
-        /* Error handling */
-        return;
-    }
+	ret = system_info_get_platform_string("http://tizen.org/system/tizenid", &tizenId);
+	if (ret != SYSTEM_INFO_ERROR_NONE) {
+		/* Error handling */
+		return;
+	}
 
 	char * topicName = tizenId;
 	int rc;

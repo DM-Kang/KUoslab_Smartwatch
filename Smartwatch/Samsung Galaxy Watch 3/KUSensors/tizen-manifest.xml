@@ -8,6 +8,7 @@
     <privileges>
         <privilege>http://tizen.org/privilege/healthinfo</privilege>
         <privilege>http://tizen.org/privilege/filesystem.read</privilege>
-   		<privilege>http://tizen.org/privilege/filesystem.write</privilege>
+        <privilege>http://tizen.org/privilege/filesystem.write</privilege>
+        <privilege>http://tizen.org/privilege/internet</privilege>
     </privileges>
 </manifest>

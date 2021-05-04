@@ -2,6 +2,6 @@
 #define VERSIONINFO_H
 
 #define BUILD_TIMESTAMP "Mon 18 Jan 2021 06:44:09 PM KST"
-#define CLIENT_VERSION  "1.2.0"
+#define CLIENT_VERSION  "1.3.8"
 
 #endif /* VERSIONINFO_H */

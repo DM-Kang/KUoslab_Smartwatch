@@ -21,12 +21,12 @@
 #include <dlog.h>
 
 #if !defined(PACKAGE)
-#define PACKAGE "org.example.sensors"
+#define PACKAGE "kr.ac.korea.oslab.kusensors"
 #endif
 
 #ifdef LOG_TAG
 #undef LOG_TAG
 #endif
-#define LOG_TAG "sensors"
+#define LOG_TAG "KUSensors"
 
 #endif

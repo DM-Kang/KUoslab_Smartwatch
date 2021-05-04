@@ -14,10 +14,8 @@
 #include "mqtt/MQTTClient.h"
 
 #define REST_API_ADDR 	"http://ec2-13-125-65-148.ap-northeast-2.compute.amazonaws.com:8080/KUHealth/GetMqttInfo"
-#define ADDRESS    	 	"tcp://ec2-13-125-65-148.ap-northeast-2.compute.amazonaws.com:1883"
-#define CLIENTID    	"GalaxyWatch3-1910"
-#define TOPIC       	"TizenWatch-1910"
-#define PAYLOAD     	"Hello World!"
+#define MQTT_ADDRESS    "tcp://ec2-13-125-65-148.ap-northeast-2.compute.amazonaws.com:1883"
+#define CLIENTID    	"Galaxy_Watch_3"
 #define QOS         	1
 #define TIMEOUT     	10000L
 
