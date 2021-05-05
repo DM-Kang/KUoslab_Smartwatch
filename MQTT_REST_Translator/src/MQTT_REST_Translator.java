@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
@@ -21,10 +22,10 @@ import org.json.simple.parser.ParseException;
 public class MQTT_REST_Translator {
 	public static void main(String[] args){
 		String MqttServer 	= "tcp://ec2-13-125-65-148.ap-northeast-2.compute.amazonaws.com:1883";
-		String client_id 	= "MQTT_REST_Translator_" + System.currentTimeMillis();
+		String client_id 	= "MQTT_REST_Translator_01";
 		String username 	= null;   
 		String passwd 		= null;   
-		String topic 		= "#"; // all topics in the MQTT network
+		String topic 		= "#";
 		
 		MQTT mqtt = new MQTT(MqttServer, client_id, username, passwd);
 		mqtt.init(topic);
@@ -44,13 +45,15 @@ public class MQTT_REST_Translator {
 
 	@SuppressWarnings("unchecked")
 	public static void postwork(String topic, MqttMessage mqttMessage) throws NoSuchAlgorithmException {
-		String strUrl = "http://192.168.1.12:5000/api/org.oslab.ac.kr.COVIDAsset";
+		// write address of your Hyperledger network
+		String strUrl = "http://192.168.124.102:5000/api/org.oslab.ac.kr.COVIDAsset";
 		JSONParser parser = new JSONParser();
 		try {
 			JSONObject mainJson = new JSONObject();
 			JSONObject mqttMsgJson = (JSONObject) parser.parse(new String(mqttMessage.getPayload(), "UTF-8"));
+			//System.out.println("mqttMsgJson: " + mqttMsgJson.toJSONString());
 			
-			String cid = sha256("110, Sejong-daero, Jung-gu, Seoul, Republic of Korea" + mqttMsgJson.toString().replace("\\", "")); // SHA256(the address of Seoul City Hall + Health data from SmartWatch) 
+			String cid = sha256("110, Sejong-daero, Jung-gu, Seoul, Republic of Korea" + mqttMsgJson.toJSONString()); // SHA256(the address of Seoul City Hall + Health data from SmartWatch) 
 			String pid = sha256(topic);
 			JSONObject covid = new JSONObject();
 			covid.put("$class", "org.oslab.ac.kr.COVID");
@@ -64,13 +67,15 @@ public class MQTT_REST_Translator {
 			Date date_now = new Date(System.currentTimeMillis());
 			covid.put("date", date_now.toString());
 			covid.put("travelRoute", "110, Sejong-daero, Jung-gu, Seoul, Republic of Korea");
-			covid.put("note", mqttMsgJson.toString().replace("\\", ""));
+			covid.put("note", mqttMsgJson.toJSONString());
 			
 			mainJson.put("$class", "org.oslab.ac.kr.COVIDAsset");
 			mainJson.put("COVIDId", cid);
 			mainJson.put("covid", covid);
 			
-			post(strUrl, mainJson.toString().replace("\\", ""));
+			//System.out.println("mainJson: " + mainJson.toJSONString());
+			
+			post(strUrl, mainJson.toJSONString());
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();
 		} catch (ParseException e1) {
@@ -82,12 +87,12 @@ public class MQTT_REST_Translator {
 		try {
 			URL url = new URL(strUrl);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			con.setConnectTimeout(5000); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ Timeout ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
-			con.setReadTimeout(5000); // InputStream ï¿½Ð¾ï¿½ ï¿½ï¿½ï¿½ï¿½ Timeout ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
+			con.setConnectTimeout(5000); //¼­¹ö¿¡ ¿¬°áµÇ´Â Timeout ½Ã°£ ¼³Á¤
+			con.setReadTimeout(5000); // InputStream ÀÐ¾î ¿À´Â Timeout ½Ã°£ ¼³Á¤
 
 			con.setRequestMethod("POST");
 
-			//jsonï¿½ï¿½ï¿½ï¿½ messageï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ 
+			//jsonÀ¸·Î message¸¦ Àü´ÞÇÏ°íÀÚ ÇÒ ¶§ 
 			con.setRequestProperty("Content-Type", "application/json");
 			con.setDoInput(true);
 			con.setDoOutput(true);
@@ -95,7 +100,7 @@ public class MQTT_REST_Translator {
 			con.setDefaultUseCaches(false);
 
 			OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
-			wr.write(jsonMessage); //json ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ message ï¿½ï¿½ï¿½ï¿½ 
+			wr.write(jsonMessage); //json Çü½ÄÀÇ message Àü´Þ 
 			wr.flush();
 
 			StringBuilder sb = new StringBuilder();
@@ -106,7 +111,7 @@ public class MQTT_REST_Translator {
 					sb.append(line).append("\n");
 				}
 				br.close();
-				System.out.println("" + sb.toString());
+				System.out.println("HTTP Res: " + sb.toString());
 			} else {
 				System.out.println(con.getResponseMessage());
 			}
@@ -116,7 +121,7 @@ public class MQTT_REST_Translator {
 	}
 	
     /**
-     * SHA-256ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½ï¿½Ï´ï¿½ ï¿½Þ¼Òµï¿½
+     * SHA-256À¸·Î ÇØ½ÌÇÏ´Â ¸Þ¼Òµå
      * 
      * @param bytes
      * @return
@@ -131,7 +136,7 @@ public class MQTT_REST_Translator {
  
  
     /**
-     * ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ñ´ï¿½
+     * ¹ÙÀÌÆ®¸¦ Çí½º°ªÀ¸·Î º¯È¯ÇÑ´Ù
      * 
      * @param bytes
      * @return
