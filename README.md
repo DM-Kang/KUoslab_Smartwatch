@@ -14,10 +14,10 @@ The structure of this software can be described as follows.
 Smartwatches are great devices that can provide information on the movement of users. It can also measure the user's health information (heart rate, blood pressure, blood sugar, step count, etc.) and transmit the data directly to the cloud server via Wi-Fi or cellular networks.
 Currently, a watch application using Tizen-based Samsung Galaxy Watch 3 is implemented and uses the MQTT protocol.
 
-## MQTT Broker & MQTT to REST Translator
-The MQTT protocol is a popular protocol widely used for data transmission of IoT devices. MQTT can be used in high-performance devices such as smartphones as well as small devices without OS. In addition, it is supported by most commercial clouds (ex> Amazon AWS, MS Azure, etc.), so it has an advantage in terms of connectivity.
+## MQTT Broker, REST API Server & MQTT to REST Translator
+The MQTT protocol is a popular protocol widely used for data transmission of IoT devices. MQTT can be used in high-performance devices such as smartphones as well as small devices without OS. In addition, it is supported by most commercial Clouds (ex> Amazon AWS, MS Azure, etc.), so it has an advantage in terms of connectivity.
 In this project, Mosquitto is used as MQTT Broker, and Mosquitto Configuration Files are provided for correct use.
-In addition, this project supports MQTT to REST Translator to convert MQTT messages into REST API calls.
+In addition, this project provides REST API Server & MQTT to REST Translator to support functionalities such as secure connection between smartwatches and the Cloud and converting MQTT messages into REST API calls.
 
 ## Blockchain Network based on Hyperledger-Fabric
 
