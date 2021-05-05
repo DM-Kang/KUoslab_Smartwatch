@@ -83,7 +83,7 @@ If it is successful, you will be able to confirm that the tpk file is normally i
 Mosquitto is an open source MQTT Broker that anyone can easily use. Installation can be done through the command below. (Ubuntu 20.04)
 
 ```
-sudo apt-get install mosquitto
+sudo apt-get install mosquitto mosquitto-clients
 ```
 
 When Mosquitto is installed, shut down the Mosquitto daemon as follows to use customized configurations for this project, and run it again with the configuration file.
@@ -102,25 +102,44 @@ mosquitto_sub -t "Topic" -p 1883
 
 
 
-#### Running MQTT to REST Translator
+#### Running REST API Server
 
-The Hyperledger network used in this project provides REST APIs externally for creating, querying, and deleting Ledgers. Therefore, you need a plug-in that uses the data transmitted from the smartwatch to convert it to REST APIs and delivers it to the Hyperledger network. Since this application is written in Java, you can make it into a Jar-type executable file and run it with MQTT Broker.
+REST API Server is a component that the smartwatch accesses when communicating with the cloud for the first time. It checks whether the smartwatch requesting connection is a valid device, and returns necessary information for MQTT connection. Also, The Hyperledger network used in this project provides REST APIs externally for creating, querying, and deleting Ledgers. Therefore, you need a plug-in that uses the data transmitted from the smartwatch to convert it to REST APIs and delivers it to the Hyperledger network. This software was developed based on Spring Boot Framework, and can be easily compiled through Maven. 
 
 The execution command of the JAR file is as follows.
 
 ```
-cd MQTT_REST_Translator/bin
-java -jar MQTT_REST_Translator.jar
+cd REST_API_Server/bin
+java -jar ku-health-api-0.0.1-SNAPSHOT.jar
 ```
 
 
 
 ## Hyperledger Network-side
 
-***<u>To install this software, your computer must have at least 8 GB of storage (cannot be installed on instances provided through AWS Free-tier).</u>***
+#### (Optional) Running MQTT to REST Translator
+
+*(The functions of MQTT to REST Translator are currently integrated in REST API Server. But if access is difficult due to problems such as Public Domain from MQTT Broker-side to Hyperledger Network-side, run this software on Hyperledger Network-side to connect with 2 components above. Since this application is written in Java, you can make it into a Jar-type executable file and run it on Hyperledger Network-side.)*
+
+The execution command of the JAR file is as follows.
+
+```
+cd MQTT_REST_Translator/target
+java -jar MQTT_REST_Translator.jar
+```
+
+
 
 #### Installing & Running Hyperledger-Composer & Fabric
 
+***<u>To install this software, your computer must have at least 8 GB of storage (cannot be installed on instances provided through AWS Free-tier)</u>***
+
+- Linux(Ubuntu 16.04 or higher)
+
+- Docker
+
+  https://docs.docker.com/install/linux/docker-ce/ubuntu/ 
+  
 - NVM
 
   ```
@@ -133,7 +152,7 @@ java -jar MQTT_REST_Translator.jar
 - NODEJS & NPM
 
   ```
-   nvm install v8
+   nvm install v8.7
   ```
 
 - MongoDB
@@ -173,11 +192,13 @@ java -jar MQTT_REST_Translator.jar
 
   ![results1](https://tva1.sinaimg.cn/large/008i3skNgy1gq0jahphloj31xo0n5qni.jpg)
 
-- Running Hyperledger Composer REST Server
+- Running Hyperledger Composer REST Server & MongoDB
 
   ```
    cd ../hyperledger-composer
    ./run-oslab.sh
+   cd ../../app/bin
+   ./db.sh
   ```
 
   - Checking the execution result (Issuing an Admin Card and checking the chaincode installation)
@@ -185,7 +206,7 @@ java -jar MQTT_REST_Translator.jar
     ![results2](https://tva1.sinaimg.cn/large/008i3skNgy1gq0jdt4yjoj30uu0q2dja.jpg)
 
   - Checking Composer's REST server execution (http://localhost:5000)
-
+  
     ![results3](https://tva1.sinaimg.cn/large/008i3skNgy1gq0jeq2tdkj31jk0u04qp.jpg)
 
 
