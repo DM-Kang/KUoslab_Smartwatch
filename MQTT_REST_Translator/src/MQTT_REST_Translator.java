@@ -46,14 +46,14 @@ public class MQTT_REST_Translator {
 	@SuppressWarnings("unchecked")
 	public static void postwork(String topic, MqttMessage mqttMessage) throws NoSuchAlgorithmException {
 		// write address of your Hyperledger network
-		String strUrl = "http://192.168.124.102:5000/api/org.oslab.ac.kr.COVIDAsset";
+		String strUrl = "http://localhost:5000/api/org.oslab.ac.kr.COVIDAsset";
 		JSONParser parser = new JSONParser();
 		try {
 			JSONObject mainJson = new JSONObject();
 			JSONObject mqttMsgJson = (JSONObject) parser.parse(new String(mqttMessage.getPayload(), "UTF-8"));
 			//System.out.println("mqttMsgJson: " + mqttMsgJson.toJSONString());
 			
-			String cid = sha256("110, Sejong-daero, Jung-gu, Seoul, Republic of Korea" + mqttMsgJson.toJSONString()); // SHA256(the address of Seoul City Hall + Health data from SmartWatch) 
+			String cid = sha256("110, Sejong-daero, Jung-gu, Seoul, Republic of Korea" + mqttMsgJson.toString().replace("\\", "")); // SHA256(the address of Seoul City Hall + Health data from SmartWatch) 
 			String pid = sha256(topic);
 			JSONObject covid = new JSONObject();
 			covid.put("$class", "org.oslab.ac.kr.COVID");
@@ -67,7 +67,7 @@ public class MQTT_REST_Translator {
 			Date date_now = new Date(System.currentTimeMillis());
 			covid.put("date", date_now.toString());
 			covid.put("travelRoute", "110, Sejong-daero, Jung-gu, Seoul, Republic of Korea");
-			covid.put("note", mqttMsgJson.toJSONString());
+			covid.put("note", mqttMsgJson.toString().replace("\\", ""));
 			
 			mainJson.put("$class", "org.oslab.ac.kr.COVIDAsset");
 			mainJson.put("COVIDId", cid);
