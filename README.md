@@ -113,7 +113,9 @@ cd REST_API_Server/bin
 java -jar ku-health-api-0.0.1-SNAPSHOT.jar
 ```
 
+![스크린샷 2021-05-04 오후 9.20.22](https://tva1.sinaimg.cn/large/008i3skNgy1gq8mg3xmx2j30lf0ook1j.jpg)
 
+![스크린샷 2021-05-04 오후 9.24.32](https://tva1.sinaimg.cn/large/008i3skNgy1gq8mgf8nhuj30cg0c6q5m.jpg)
 
 ## Hyperledger Network-side
 
